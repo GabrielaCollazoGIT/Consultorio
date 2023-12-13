@@ -8,7 +8,7 @@ router.get('/',doctorController.getDoctors);
 
 router.get('/:id',doctorController.getDoctorById);
 
-router.get('/:id',doctorController.getDoctorByIdAndTurnsAvailables);
+//router.get('/:id',doctorController.getDoctorByIdAndTurnsAvailables);
                 
 router.post('/new', doctorController.createDoctor);
 

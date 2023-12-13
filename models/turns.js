@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 
-const turnSchema = new mongoose.Schema({  // con el Schema tenemos acceso a utilizar middleware. para las paswoords
-    date:{
-        type:Date,
-        required:true,
-    },
-doctor: { type: mongoose.Types.ObjectId, required:true, ref: 'Doctor'} 
+const turnSchema = new mongoose.Schema({  
+    date:{type:Date, required:true,},
+    hour:{type:Date, required:true},
+    disponible:{type:Boolean, required:true},
+    speciality:{type:mongoose.Types.ObjectId, required:true, ref:'Speciality'},
+    doctor: { type: mongoose.Types.ObjectId, required:true, ref: 'Doctor'}, 
+    user:{type:mongoose.Types.ObjectId, required:true, ref:'User'}
 })
 
 const Turn = mongoose.model('Turn',turnSchema); 

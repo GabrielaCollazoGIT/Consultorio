@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken');
 
 
 const userSchema = new mongoose.Schema({  // con el Schema tenemos acceso a utilizar middleware. para las paswoords
+    userName:{
+        type:String,
+        required:true,
+        unique:true
+    },
     email:{
         type:String,
         required:true,
@@ -29,6 +34,10 @@ const userSchema = new mongoose.Schema({  // con el Schema tenemos acceso a util
         }
 
     },
+    rol:{
+        type:String,
+        required:true,
+    },
     tokens:[{
         token:{
             type:String,
@@ -36,7 +45,7 @@ const userSchema = new mongoose.Schema({  // con el Schema tenemos acceso a util
         }
     }],
 },{
-    timestamps:true // es sierve para hacer un historico de cuando se crea el usuario y cuando es actualizado(createdAt,updatedAt)
+    timestamps:true // es sirve para hacer un historico de cuando se crea el usuario y cuando es actualizado(createdAt,updatedAt)
 })
                     // nos permite acceder a las propiedades, y es virtual porque no se cambia nada, es solo para saber sus relaciones
     // necesita 2 arg el 1° es como lo voy a llamar('tasks', serian las tareas del usuario, es como un array virtual)
@@ -46,23 +55,40 @@ userSchema.virtual('role',{// esto no es data guardada en db, es una relacion en
     foreignField: 'user' //  es el nombre de la propiedad en Role que hace la asociacion con User
 }) 
 
-////////////////////HASHH PASSWORD ANTES DE GUARDAR///////////////////
-// pre hace algo antes, entonces el proposito es hacer algo antes de guardar al usuario
-// el primer argumento es lo q determina q se debe hacer antes, el segundo es la funcion 
-userSchema.pre('save', async function(next){ // siempre se llama a next cuando la funcion termina
-    const user = this
-
-    // es un metodo de mongoose para saber si la contraseña es la misma o la modifico
-    if(user.isModified('password')){
-        user.password = await bcrypt.hash(user.password,8); // sobreescribo el valor de la antigua contraseña
-    }
-
-    console.log("despues de guardar al usuario");
 
 
-    next(); // si no llamamos a next, se va a quedar estancado pensando que seguimos corriendo codigo despues que guardemos al usuario, 
-    // y creyendo que nunca guaramos al usuario
-})
+//------------------Metodo para genenrar un token para el login-------------------------
+        // methods es accesible para las instancias
+        userSchema.methods.generateAuthToken = async function(){
+            const user = this;
+                                    // es toString() xq el id es un objeto...!!! imp
+            const token = jwt.sign({_id: user._id.toString()},'secret');
+            user.tokens = user.tokens.concat({token}); // agrego el toquen al array
+        
+                await user.save(); // despues de generar el token lo guardo en la base de datos
+            return token;
+        }
+        
+
+
+
+//-------------- Este metodo es para encontrar un usuario por email y contraseña y usarlo en el router---------------
+        // es estatico para acceder dieractamente al modulo una vez que tenga acceso
+        userSchema.static.findByCredentials = async (email,password) =>{
+            const user = await User.findOne({email})
+    
+            if(!user){
+                throw new Error('Uneable to login');
+            }
+    
+                const isMatch = await bcrypt.compare(password, user.password);
+    
+                if(!isMatch){
+                    throw new Error('Uneable to login');
+                }
+        return user;
+    
+        }
 
 
 const User = mongoose.model('User',userSchema ); 
