@@ -7,7 +7,10 @@ const turnSchema = new mongoose.Schema({
     disponible:{type:Boolean, required:true},
     speciality:{type:mongoose.Types.ObjectId, required:true, ref:'Speciality'},
     doctor: { type: mongoose.Types.ObjectId, required:true, ref: 'Doctor'}, 
-    user:{type:mongoose.Types.ObjectId, required:true, ref:'User'}
+    user:{type:mongoose.Types.ObjectId, required:true, ref:'User'},
+    dni:{type:Number, required:true}
+},{
+    timestamps:true // es sirve para hacer un historico de cuando se crea  y cuando es actualizado(createdAt,updatedAt)
 })
 
 const Turn = mongoose.model('Turn',turnSchema); 

@@ -1,0 +1,33 @@
+const HttpError = require('../middleweare/http-error');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+const auth = async (request, response, next) => {
+
+    if(request.method === 'OPTIONS'){
+        return next(); // // esto es para que el flujo siga, y no se detenga
+    }
+    try {        
+                                          // usamos el split para separar lo que viene en el array, separado por el espacio, el barer y el token, y accedemos al segundo elemento [1]
+    const token = request.headers.authorization.split(' ')[1]; // en el Cors los aceptamos, accedemos a extraer datos y obtenemos el token ... Authorization : 'Bearer TOKEN' 
+
+    if(!token){
+        throw new Error('Authentication falied!'); 
+    }
+    const decodedToken = jwt.verify(token,'SECRET_KEY');//verificamos el token, 1° argumento el token de la request y el segundo el exacto token que le puse al controller de user ('supersecret_dont_share)
+            // el decodedToken tiene el userId, el email y el rol
+            //request.userData = {userId: decodedToken.userId, }
+    
+            const user = await User.findOne({_id: decodedToken.userId, 'tokens.token':token});
+            request.userToken = token 
+            request.user = user;
+            
+            next();// lo agrego para que  continue con el trayecto y vayan a otras rutas cdonde requieren autentication
+} catch (err) {
+        const error = new HttpError('Authetication failed, no token....', 403);
+        return next(error);
+        }
+    
+};
+
+module.exports = auth;

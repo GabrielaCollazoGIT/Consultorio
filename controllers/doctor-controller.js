@@ -1,6 +1,7 @@
-const { default: mongoose } = require("mongoose");
+//const { default: mongoose } = require("mongoose");
 const HttpError = require('../middleweare/http-error'); 
-const {validationResult} = require('express-validator');
+//const {validationResult} = require('express-validator');
+const User = require('../models/user');
 const Doctor = require('../models/doctor');
 const Speciality = require('../models/speciality');
 
