@@ -15,6 +15,6 @@ router.use(validateRol);
 
 router.get('/', userController.getUsers);
 
-router.post('/logout',userController.logout);
+
 
 module.exports = router;

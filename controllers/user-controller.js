@@ -7,7 +7,7 @@ const getUsers = async (request,response,next) =>{
     //llaves abiertas y - el campo no quiero ver quiero que me devuevla todo menos la contraseña
     let users;
     try {
-    users = await User.find({},'-password -tokens');  
+    users = await User.find({},'-password');  
 
 } catch (error) {
     console.log(error);
@@ -19,7 +19,7 @@ const getUsers = async (request,response,next) =>{
 
 const signUp = async (request,response,next) =>{
 
-    const  {userName,email,password,rol} = request.body; 
+    const  {userName,email,password,rol,dni} = request.body; 
 let existingUser;
 
     try {                           
@@ -46,22 +46,11 @@ let existingUser;
         userName,
         email,
         password: hashedPassword, // guardamos encriptada
-        rol
+        rol,
+        dni
     });
     console.log(createUser);
 
-    
-    let token;  
-    try {
-                                                           // el 2° argumento es la key privada(que solo el servido sabe)
-    token = jwt.sign({userId: createUser.id,rol:createUser.rol, email: createUser.email},'SECRET_KEY',{expiresIn:'2h'} ); // devuelve un string q es el token, 1° argumento es el dato q quiero codificar en el token
-        
-    } catch (err) {
-        
-        const error = new HttpError('Signing up failded please try again, token error...',500);
-        return next(error);
-    }    
-    createUser.tokens = createUser.tokens.concat({token}); 
     try {
         await createUser.save();
     } catch (err) {
@@ -71,7 +60,7 @@ let existingUser;
         return next(error);// retornamos next() para parar la ejecucion del codigo en caso de que tengamos un error...
     }       
                       // esta es la respuesta que quiero devolver al frontEnd
-    response.status(201).send({createUser,token});
+    response.status(201).send({createUser});
 
 };
 
@@ -93,25 +82,7 @@ const login = async (request,response,next) =>{
         return next(err);
     }
 
-    let token;  
-    try {
-                    // payload                                       // el 2° argumento es la key privada(que solo el servidor sabe), usar ma misma key, sino se generaran diferentes tokens
-    token = jwt.sign({userId: existingUser.id,rol:existingUser.rol, email: existingUser.email},'SECRET_KEY',{expiresIn:'2h'} ); // devuelve un string q es el token, 1° argumento es el dato q quiero codificar en el token
-        console.log(token);
-    } catch (err) {
-        console.log(err);
-        const error = new HttpError('Login failded please try again, token error...',500);
-        return next(error);
-    } 
-    existingUser.tokens = existingUser.tokens.concat({token}); 
-    try {
-        await existingUser.save();
-    } catch (err) {
-        console.log(err);
-        const error = new HttpError('Signing up failded please try again...',500);
-
-        return next(error);// retornamos next() para parar la ejecucion del codigo en caso de que tengamos un error...
-    }       
+    
 let isValidPassword = false;
 try {
     isValidPassword = await bcrypt.compare(password, existingUser.password); // comparamos la password de la request{que va asi}, con la del la base de datos q esta encriptada.       
@@ -123,42 +94,27 @@ try {
         const err = new HttpError('Invalid User or Password, could not log you in.', 401);
         return next(err);
     }
+
+    let token;  
+    try {
+                    // payload                                       // el 2° argumento es la key privada(que solo el servidor sabe), usar ma misma key, sino se generaran diferentes tokens
+    token = jwt.sign({userId: existingUser.id,rol:existingUser.rol, email: existingUser.email},'SECRET_KEY',{expiresIn:'2h'} ); // devuelve un string q es el token, 1° argumento es el dato q quiero codificar en el token
+        console.log(token);
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError('Login failded please try again, token error...',500);
+        return next(error);
+    } 
+
                                         // tengo que mapear el usuario a una propiedad, lo devuelvo en la respuesta para obtener el id y crear un place en el front
     response.json({userId: existingUser.id,rol:existingUser.rol, email:existingUser.email, token: token});
 
 };
 
 
-//este endpoint es para desloguarse y va a necesitar autenticacion para acerlo
-
-const logout = async (request,response)=>{
-
-    // necesito el token especifico para desloguearme, porqur puede ser que tenga mas de 1, cuando inicie sesion desde mi celular,tablet o pc
-    // y no quiero desloguarme de todos ellos
-   // console.log(request.userData.userId );
-    console.log(request.userToken );
-try {
-    
-    // como ya tengo acceso al usuario no tengo que hacer un fetch, lo tengo ya en la requesst
-    // accedo al array de tokens
-    console.log('en el logout controller   '+request.user);
-    request.user.tokens = request.user.tokens.filter((token) => {
-        //va a mandar true si no es igual y lo va a mantener en el array
-        // va a mandar false si es igual, filtrandolo y eliminandolo
-        return token.token !== request.userToken;
-    })
-    await request.user.save();
-    response.send('Logging out....');
-} catch (error) {
-    console.log(error);
-    response.status(500).send();
-}
-
-};
 
 exports.signUp = signUp;
 exports.login = login;
-exports.logout = logout;
 exports.getUsers = getUsers;
 
 

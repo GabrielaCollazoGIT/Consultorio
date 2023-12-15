@@ -36,12 +36,10 @@ const userSchema = new mongoose.Schema({  // con el Schema tenemos acceso a util
         required:true,
         uppercase: true,
     },
-    tokens:[{
-        token:{
-            type:String,
+    dni:{
+            type:Number,
             required: true
         }
-    }],
 },{
     timestamps:true // es sirve para hacer un historico de cuando se crea el usuario y cuando es actualizado(createdAt,updatedAt)
 })

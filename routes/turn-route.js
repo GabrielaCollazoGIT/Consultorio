@@ -9,9 +9,9 @@ router.get('/:id',turnController.getCancelationsByUser); // turnos en estado can
 
 router.get('/patient',turnController.getTurnsByPatiens); // ver si es la lista de turnos de todos los pacientes o la lista de ese paciente.
 
-router.patch('/patient/turn/:id', turnController.reservTurn); // reserva de turno, pasar datos del paciente y cambiar a estado reservado
+router.patch('/patient/:id', turnController.reservTurn); // reserva de turno, pasar datos del paciente y cambiar a estado reservado
 
-router.patch('/patient/turn/:id', turnController.canceledTurn); // reserva de turno, pasar datos del paciente y cambiar a estado cancelado
+router.patch('/patient/:id', turnController.canceledTurn); // reserva de turno, pasar datos del paciente y cambiar a estado cancelado
 
 router.use(auth);
 router.use(validateRol);

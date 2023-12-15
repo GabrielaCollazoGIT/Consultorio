@@ -18,7 +18,7 @@ const auth = async (request, response, next) => {
             // el decodedToken tiene el userId, el email y el rol
             //request.userData = {userId: decodedToken.userId, }
     
-            const user = await User.findOne({_id: decodedToken.userId, 'tokens.token':token});
+            const user = await User.findOne({_id: decodedToken.userId});
             request.userToken = token 
             request.user = user;
             

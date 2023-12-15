@@ -5,7 +5,7 @@ const adminValidate = async (request, response, next) => {
     }
 
     if(rol !== 'ADMIN') {
-        return response.status(403).send({message: 'Forbbiden access'});
+        return response.status(403).send({message: 'Forbidden access'});
 
     }
     next();
