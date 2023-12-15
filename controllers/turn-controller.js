@@ -14,7 +14,7 @@ const getTurnByDoctors  = async (request, response,next) => {
     let turnsByDoctor;
     const doctorId = request.params.id;
 try {
-    turnsByDoctor = await Turn.findOne({doctor: doctorId }).populate('doctor'); // accedo a la propiedad que tiene ese id asociado         //DUMMY_PLACES.filter( p => { // este me vaa devolver una array  filtrando por todos los lugares que se correspondan al userId
+    turnsByDoctor = await Turn.findOne({doctor: doctorId }).populate('doctor');
     console.log(turnsByDoctor);
 } catch (error) {
     const err = new HttpError('Fetching turns failed, please try again later',500);
