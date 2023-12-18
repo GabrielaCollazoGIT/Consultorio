@@ -106,7 +106,7 @@ try {
         return next(error);
     } 
 
-                                        // tengo que mapear el usuario a una propiedad, lo devuelvo en la respuesta para obtener el id y crear un place en el front
+                                 // tengo que mapear el usuario a una propiedad, lo devuelvo en la respuesta para obtener el id y crear un place en el front
     response.json({userId: existingUser.id,rol:existingUser.rol, email:existingUser.email, token: token});
 
 };

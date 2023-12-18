@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 
 const turnSchema = new mongoose.Schema({  
     date:{type:Date, required:true,},
-    hour:{type:Date, required:true},
+    hour:{type:String, required:true},
     speciality:{type:mongoose.Types.ObjectId, required:true, ref:'Speciality'},
     doctor: { type: mongoose.Types.ObjectId, required:true, ref: 'Doctor'}, 
    // user:{type:mongoose.Types.ObjectId, required:true, ref:'User'},
-    dni:{type:Number, required:false},
+    dni:{type:Number, require: true, unique:true,sparse:true, default:undefined},
+
     status: {
         type: String,
         enum: [

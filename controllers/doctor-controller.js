@@ -1,14 +1,15 @@
 //const { default: mongoose } = require("mongoose");
 const HttpError = require('../middleweare/http-error'); 
 //const {validationResult} = require('express-validator');
-const User = require('../models/user');
+
 const Doctor = require('../models/doctor');
 const Speciality = require('../models/speciality');
+const Turn = require('../models/turns');
 
 ///// ALL Doctors//// chek
 const getDoctors = async (request,response,next) =>{
     let doctors;
-    try {
+    try {   
         doctors = await Doctor.find().populate('speciality');      
     
 } catch (error) {
@@ -42,8 +43,8 @@ const getDoctorById = async (request,response,next) =>{
 };
 ////// Create doctor
 const createDoctor = async (request,response,next) =>{
-
-    const  {name,lastname,dni,email,telephone,nacionality,speciality} = request.body;  
+                                                    //timing
+    const  {name,lastname,dni,email,telephone,nacionality,speciality,timing} = request.body;  
 let existingDoctor;
 
 let specialityFind; 
@@ -76,6 +77,8 @@ try {
         telephone,
         nacionality,
         speciality:specialityFind,
+        //timing, es un array con la franja horaria disponible
+        timing,
         active:true
 
     });
@@ -131,12 +134,33 @@ try {
         const err = new HttpError('Something went wrong, could not update doctor',500);        
             return next(err); 
     }
-  
+
     response.status(200).send(doctor);
 };
 
+/// ver de que envie solo nombre, apellido y especialidad del medico
+const getDoctorByIdAndTurnsAvailables = async (request,response,next) =>{
+    const doctorId = request.params.id;
+
+    let turns;                        
+        try {
+            turns = await Turn.find({doctor:doctorId, status:"available"}).populate('doctor');
+            
+        } catch (error) {
+            const err = new HttpError('Something went wrong, couldn´t not find a turns', 500);
+            return next(err);
+        }
+    if(!turns){
+        const error = new HttpError('Could not find a turns for the provided id',404); 
+        return next(error); 
+    }
+
+                    // convierto a javascript object y agrego getters, porque mongoose tiene metodos geters para acceder al id, como un string sin el _id                                                               // si el nombre de la variable es igua al de la propiedad lo invoco directamente {place} =>{place:place}       //.Json lo manda a los headers  como Content-Type: application/json
+    response.send(turns); 
+};
 
 exports.getDoctors = getDoctors;
 exports.getDoctorById = getDoctorById;
 exports.createDoctor= createDoctor;
 exports.updateDoctor= updateDoctor;
+exports.getDoctorByIdAndTurnsAvailables = getDoctorByIdAndTurnsAvailables;

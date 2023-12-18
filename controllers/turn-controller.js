@@ -6,15 +6,15 @@ const Turn = require('../models/turns');
 
 
 
-
+//GET TURNS BY DOCTOR ID... OK
 
 // ver turnos solo como admin, preguntar si es con las reservas hechas(creo q si)
 const getTurnByDoctors  = async (request, response,next) => {
 
-    let turnsByDoctor;
     const doctorId = request.params.id;
+    let turnsByDoctor;
 try {
-    turnsByDoctor = await Turn.findOne({doctor: doctorId }).populate('doctor');
+    turnsByDoctor = await Turn.find({doctor: doctorId });
     console.log(turnsByDoctor);
 } catch (error) {
     const err = new HttpError('Fetching turns failed, please try again later',500);
@@ -29,10 +29,10 @@ try {
 
 };     
 
-
-// solo admin disponible en el sistema 
+//CREATE TURN---- FALTA
+// solo admin disponible en el sistema  /// estudiar bien el tema de las fechas y horas...
 const createTurn = async (request, response,next) => {
-const {date,hour,doctor,speciality} = request.body
+const {date,hour,doctor,speciality,dni} = request.body
 
 let doctorFind; 
 try {
@@ -53,12 +53,17 @@ try {
     const err = new HttpError('Creating Turn failed, please try again',500);        
         return next(err); 
 }
-if(specialityFind !== doctorFind.speciality){
-    const error = new HttpError('this Doctor don´t have that speciality, please choose another instead',422);
-    return next(error);
-}
 
-let existingTurn;
+doctorFind.speciality.forEach(speciality =>{
+    if(specialityFind._id.toString() !== speciality._id.toString()){
+        console.log('speciality._id'+speciality._id.toString());
+        console.log('specialityfind_id'+specialityFind._id);
+        const error = new HttpError('this Doctor don´t have that speciality, please choose another instead',422);
+        return next(error);
+    }
+});
+
+/* let existingTurn;
     try {                           
         existingTurn = await Turn.findOne({doctor: doctor, date:date, hour:hour });
     
@@ -71,7 +76,7 @@ let existingTurn;
         if(existingTurn){
             const error = new HttpError('turn exist already, please choose another instead',422);
             return next(error);
-        }
+        } */
 
     
 
@@ -79,15 +84,17 @@ let existingTurn;
     const createTurn = new Turn({
         date,
         hour,
-        status:"available",
         speciality:specialityFind,
-        doctor:doctorFind
+        doctor:doctorFind,
+        dni
+    
 
     });
     console.log(createTurn);
     try {
         await createTurn.save(); 
     } catch (err) {
+        console.log(err);
         const error = new HttpError('Save turn failded please try again...',500);
 
         return next(error);
@@ -96,12 +103,24 @@ let existingTurn;
     response.status(201).send(createTurn);
 
 
-};            
+};    
+// UPDATE TURN --- FALTA        
 // solo admin  disponible en el sistema
-const updateTurn = (request, response,next) => {
-    
+const updateTurn = async (request, response,next) => {
+    try {
+        const updatedTurn = await Turn.findByIdAndUpdate(
+            request.params.id,
+            {$set: request.body},
+            {new: true}
+        );
+        response.status(200).json(updatedTurn);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
 }; 
 
+// DELETE TURN --OK
 // solo admin
 const deleteTurn = async (request, response,next) => { 
     const turnId = request.params.id
@@ -109,20 +128,50 @@ const deleteTurn = async (request, response,next) => {
         await Turn.findByIdAndDelete(turnId);
         response.status(200).json("Deleted Turn");
     } catch (error) {
-
         response.status(500).json(error);
         
     }
 }; 
 
+// HISTORIAL TURNOS CANCELADOS---
 // historial turnos en estado cancelado...
-const getCancelationsByUser = (request, response,next) => {
+const getCancelationsByUser = async (request, response,next) => {
+    const {dni} = request.body;
+    let canceledTurns;
+try {
+    canceledTurns = await Turn.find({dni: dni,status:"cancelled" }).populate('doctor');
+    console.log(canceledTurns);
+} catch (error) {
+    const err = new HttpError('Fetching turns failed, please try again later',500);
+    return next(err);
+}
+
+    if(!canceledTurns){
+       return next( new HttpError('Could not find cancelled turns for the provided patient',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
+    } // uso el next cuando es async
+
+    response.status(200).send(canceledTurns);
     
 };             
 
+// TURNOS DEL PACIENTE--- 
 //  es  la lista de turnos de ese paciente.
-const getTurnsByPatiens = (request, response,next) => {
+const getTurnsByPatiens = async (request, response,next) => {
+    const {dni} = request.body;
+    let turns;
+try {
+    turns = await Turn.find({dni: dni, status:"confirmed"}).populate('doctor');
+    console.log(turns);
+} catch (error) {
+    const err = new HttpError('Fetching turns failed, please try again later',500);
+    return next(err);
+}
 
+    if(!turns){
+       return next( new HttpError('Could not find  turns for the provided patient',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
+    } // uso el next cuando es async
+
+    response.status(200).send(turns);
 
 };              
 
