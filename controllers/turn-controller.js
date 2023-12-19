@@ -1,8 +1,53 @@
+const { get } = require('mongoose');
 const HttpError = require('../middleweare/http-error'); 
 //const {validationResult} = require('express-validator');
-const Doctor = require('../models/doctor');
+const Doctor = require ('../models/doctor');
 const Speciality = require('../models/speciality');
 const Turn = require('../models/turns');
+
+
+
+const getTurnById = async (request, response,next) => {
+    const turnId = request.params.id;
+    let turn;
+try {
+    turn = await Turn.findById(turnId).populate('doctor');
+    console.log(turn);
+} catch (error) {
+    const err = new HttpError('Fetching turn failed, please try again later',500);
+    return next(err);
+}
+
+    if(!turn){
+       return next( new HttpError('Could not find a turn for the provided id',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
+    } // uso el next cuando es async
+
+    response.status(200).json(turn);
+
+};    
+
+
+
+const getAllTurns = async (request, response,next) => {
+    
+    let turns;
+try {
+    turns = await Turn.find().populate('doctor');
+    console.log(turns);
+} catch (error) {
+    const err = new HttpError('Fetching turn failed, please try again later',500);
+    return next(err);
+}
+
+    if(!turns){
+       return next( new HttpError('Could not find any turn ',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
+    } // uso el next cuando es async
+
+    response.status(200).send(turns);
+
+};    
+
+
 
 
 
@@ -86,6 +131,7 @@ doctorFind.speciality.forEach(speciality =>{
         hour,
         speciality:specialityFind,
         doctor:doctorFind,
+        cancelations:[],
         dni
     
 
@@ -136,11 +182,11 @@ const deleteTurn = async (request, response,next) => {
 // HISTORIAL TURNOS CANCELADOS---
 // historial turnos en estado cancelado...
 const getCancelationsByUser = async (request, response,next) => {
-    const {dni} = request.body;
+    const dni = request.params.dni;
     let canceledTurns;
-try {
-    canceledTurns = await Turn.find({dni: dni,status:"cancelled" }).populate('doctor');
-    console.log(canceledTurns);
+try {                       
+    canceledTurns = await Turn.find({dni:dni}).select('cancelations');
+    console.log('turno encontrado'+canceledTurns);
 } catch (error) {
     const err = new HttpError('Fetching turns failed, please try again later',500);
     return next(err);
@@ -157,7 +203,7 @@ try {
 // TURNOS DEL PACIENTE--- 
 //  es  la lista de turnos de ese paciente.
 const getTurnsByPatiens = async (request, response,next) => {
-    const {dni} = request.body;
+    const {dni} = request.params.dni;
     let turns;
 try {
     turns = await Turn.find({dni: dni, status:"confirmed"}).populate('doctor');
@@ -167,7 +213,7 @@ try {
     return next(err);
 }
 
-    if(!turns){
+    if(turns.length == 0 ){
        return next( new HttpError('Could not find  turns for the provided patient',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
     } // uso el next cuando es async
 
@@ -176,16 +222,69 @@ try {
 };              
 
 // reserva de turno, pasar datos del paciente y cambiar a estado reservado
-const reservTurn  = (request, response,next) => {
-    const {date,hour,speciality,doctor} = request.body
-};              
-// reserva de turno, pasar datos del paciente y cambiar a estado cancelado|
-const canceledTurn  = (request, response,next) => {
+const reservTurn  = async (request, response,next) => {
+    const turnId= request.params.id
+    let getTurn;
     
+    try {
+        getTurn = await Turn.findById(turnId);
+        console.log(getTurn);
+    
+    } catch (error) {
+        console.error(error);
+        response.status(500).json("Internal server error, please try again later...");
+    }
+    if(!getTurn|| getTurn.status !== "available"){
+        return next( new HttpError('This turn is not available',500));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
+    } 
+    getTurn.status = "confirmed";
+    getTurn.dni = request.body.dni;
+    try {
+        await getTurn.save();
+    } catch (error) {
+        console.error(error);
+        response.status(500).json("Internal server error, please try again later despues de guardar...");
+    }
+    response.status(200).send(getTurn);
+
+};    
+
+
+// reserva de turno, pasar datos del paciente y cambiar a estado cancelado|
+const canceledTurn  = async (request, response,next) => {
+    
+    let turn
+    try {
+        turn = await Turn.findOne({dni:request.params.dni, date:request.body.date});
+    
+    } catch (error) {
+        console.error(error);
+        response.status(500).json("Internal server error, please try again latter...");
+    }
+    if (!turn) {
+        console.log(turn);
+        return response.status(404).json({ message: 'Turn don´t found' });
+        }
+        if(turn.cancelations.length === 0){
+            turn.cancelations = [];
+        }
+    
+            turn.cancelations.push({date:Date.now(), user:request.params.dni});
+            turn.status = 'available';
+            turn.dni = undefined
+            try {
+                await turn.save();
+            } catch (error) {
+                response.status(500).json("Can´t cancell turn... please try aganin later");
+            }
+        
+        
+        response.status(200).json({ mensaje: 'Turn cancelled succefully' });
 };              
 
 
-
+exports.getAllTurns= getAllTurns;
+exports.getTurnById= getTurnById;
 exports.getTurnByDoctors = getTurnByDoctors;
 exports.createTurn = createTurn;
 exports.updateTurn= updateTurn;

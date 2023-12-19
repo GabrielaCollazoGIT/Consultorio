@@ -5,13 +5,18 @@ const validateRol = require('../middleweare/validate.rol');
 
 const router = express.Router();
 
-router.get('/patient/cancelations',turnController.getCancelationsByUser); // turnos en estado cancelado...
+router.get('/patient/cancelations/:dni',turnController.getCancelationsByUser); // turnos en estado cancelado...
 
-router.get('/patient/turns',turnController.getTurnsByPatiens); // ver si es la lista de turnos de todos los pacientes o la lista de ese paciente.
+router.get('/patient/turns/:dni',turnController.getTurnsByPatiens); // ver si es la lista de turnos de todos los pacientes o la lista de ese paciente.
 
-router.patch('/patient/reserv', turnController.reservTurn); // reserva de turno, pasar datos del paciente y cambiar a estado reservado
+router.patch('/reserv/:id', turnController.reservTurn); // reserva de turno, pasar datos del paciente y cambiar a estado reservado
 
-router.patch('/patient/cancel', turnController.canceledTurn); // reserva de turno, pasar datos del paciente y cambiar a estado cancelado
+router.patch('/cancel/:dni', turnController.canceledTurn); // reserva de turno, pasar datos del paciente y cambiar a estado cancelado
+
+
+router.get('/',turnController.getAllTurns);
+router.get('/:id',turnController.getTurnById);
+
 //router.use(auth);
 //router.use(validateRol);
 

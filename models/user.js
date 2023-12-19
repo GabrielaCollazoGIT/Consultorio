@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({  // con el Schema tenemos acceso a util
         type:String,
         required:true,
         uppercase: true,
+        default: "USER" 
     },
     dni:{
             type:Number,
