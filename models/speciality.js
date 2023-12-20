@@ -5,6 +5,7 @@ const specialitySchema = new mongoose.Schema({  // con el Schema tenemos acceso 
     name:{
         type:String,
         required:true,
+        uppercase:true
     },
     description:{
         type:String,

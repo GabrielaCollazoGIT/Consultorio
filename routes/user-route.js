@@ -9,11 +9,16 @@ router.post('/signup', userController.signUp);
 
 router.post('/login', userController.login);
 
+router.post('/forgot-password', userController.forgotPassword);
+
 router.use(auth);
+router.patch('/new-password', userController.recoveryPassword);
 
 router.use(validateRol);
-
 router.get('/', userController.getUsers);
+
+
+
 
 
 

@@ -1,13 +1,14 @@
 const bcrypt = require('bcryptjs'); //npm install --save bcryptjs // passwords encriptadas// hashPasswords
 const jwt = require('jsonwebtoken'); //npm install --save jsonwebtoken // me genera un token para la password encryptada// la importo y por convencion empieza con mayuscula
 const User = require('../models/user');
-const HttpError = require('../middleweare/http-error'); 
+const HttpError = require('../middleweare/http-error');
+const nodemailer = require('nodemailer'); 
 
 const getUsers = async (request,response,next) =>{
     //llaves abiertas y - el campo no quiero ver quiero que me devuevla todo menos la contraseña
     let users;
     try {
-    users = await User.find({},'-password');  
+    users = await User.find({},'-password').limit(request.query.limit);  
 
 } catch (error) {
     console.log(error);
@@ -60,7 +61,7 @@ let existingUser;
         return next(error);// retornamos next() para parar la ejecucion del codigo en caso de que tengamos un error...
     }       
                       // esta es la respuesta que quiero devolver al frontEnd
-    response.status(201).send({createUser});
+    response.status(201).json(createUser);
 
 };
 
@@ -106,15 +107,95 @@ try {
         return next(error);
     } 
 
-                                 // tengo que mapear el usuario a una propiedad, lo devuelvo en la respuesta para obtener el id y crear un place en el front
-    response.json({userId: existingUser.id,rol:existingUser.rol, email:existingUser.email, token: token});
+    response.status(200).json({userId: existingUser.id,rol:existingUser.rol, email:existingUser.email, token: token});
 
 };
+
+const forgotPassword = async (request,response,next) => {
+
+    const { email } = request.body;
+
+        try {
+    
+        const user = await User.findOne({ email });
+    
+        if (!user) {
+            return res.status(404).json({ message: 'User not fount' });
+        }
+    
+        const resetToken = jwt.sign({ userId: user._id }, 'SECRET_KEY', { expiresIn: '1h' });
+    
+        const transporter = nodemailer.createTransport({
+            service: 'hotmail',
+            auth: {   
+                user: 'vortex_envio@hotmail.com',
+                pass: 'vortex632056'
+                }
+            });
+
+        const resetLink = `http://localhost:5000/api/users/new-password/${resetToken}`;
+        const mailOptions = {
+        from: 'vortex_envio@hotmail.com',
+        to: email,
+        subject: 'Password recovery',
+        text: `Click in this link for reset your password: ${resetLink}`,
+        html: `Click <a href="${resetLink}">here</a> for reset your password.`
+        };
+    
+        await transporter.sendMail(mailOptions);
+    
+        response.status(200).json({ message: 'Check your email for a link to reset your password', link:resetLink});
+        } catch (error) {
+        console.error(error);
+        response.status(500).json({ message: 'Internal server error'});
+        }
+    };
+    
+
+
+
+
+
+const recoveryPassword = async (request,response,next) => {
+
+    const { newPassword , confirmPassword } = request.body;
+    const resetToken = request.headers.reset;
+
+    if(!(resetToken && newPassword && confirmPassword)){
+        response.status(400).json({message:'All fields are required'});
+    }
+
+    const decodedToken = jwt.verify(resetToken, 'SECRET_KEY');
+        try {
+        
+        // Verificar el token
+        const user = await User.findById(decodedToken.userId);
+    
+        if (!user) {
+            return response.status(404).json({ message: 'User not fount' });
+        }
+    
+        if(newPassword !== confirmPassword){
+            return response.status(404).json({ message: 'error... the passwords don´t match' });
+        }
+        // Actualizar la contraseña y responder con éxito
+        user.password = await bcrypt.hash(newPassword, 8);
+        await user.save();
+    
+        response.status(200).json({ message: 'reset password succefully...' });
+        } catch (error) {
+        console.error(error + 'aca sera el error?');
+        response.status(500).json({ message: 'Error interno del servidor' });
+        }
+};
+
 
 
 
 exports.signUp = signUp;
 exports.login = login;
+exports.forgotPassword = forgotPassword;
+exports.recoveryPassword = recoveryPassword;
 exports.getUsers = getUsers;
 
 

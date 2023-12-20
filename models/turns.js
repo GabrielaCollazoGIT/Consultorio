@@ -7,8 +7,8 @@ const turnSchema = new mongoose.Schema({
     speciality:{type:mongoose.Types.ObjectId, required:true, ref:'Speciality'},
     doctor: { type: mongoose.Types.ObjectId, required:true, ref: 'Doctor'}, 
    // user:{type:mongoose.Types.ObjectId, required:true, ref:'User'},
-    dni:{type:String, require: true, default:""},
-    cancelations: [{ date: { type: Date, default: Date.now }, user:{type:String}, status:{type:String, default:"Cancelled"} }],
+    dni:{type:String, require: true, default:undefined},
+    //cancelations: [{ date: { type: Date, default: Date.now }, user:{type:String}, status:{type:String, default:"Cancelled"} }],
     status: {
         type: String,
         enum: [
@@ -24,8 +24,6 @@ const turnSchema = new mongoose.Schema({
 },{
     timestamps:true // es sirve para hacer un historico de cuando se crea  y cuando es actualizado(createdAt,updatedAt)
 })
-
-
 
 const Turn = mongoose.model('Turn',turnSchema); 
 

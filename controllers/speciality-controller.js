@@ -6,16 +6,22 @@ const Speciality = require('../models/speciality');
 
 ///// ALL speciality//// chek
 const getSpecialities = async (request,response,next) =>{
-    let speciality;
+    let specialities;
     try {
-        speciality = await Speciality.find();      
+        specialities = await Speciality.find().limit(request.query.limit);;      
     
 } catch (error) {
 
     const err = new HttpError('Find Specialities failed, please try again later', 500);
         return next(err);
     }
-    response.send(speciality);
+
+    if(!specialities|| specialities.length === 0){
+        const error = new HttpError('Could not find any Speciality',404); 
+        return next(error); 
+    }
+
+    response.status(200).json(specialities);
 }
 ///// speciality BY Id
 const getSpecialityById = async (request,response,next) =>{
@@ -34,8 +40,7 @@ const getSpecialityById = async (request,response,next) =>{
         return next(error); 
     }
 
-                    // convierto a javascript object y agrego getters, porque mongoose tiene metodos geters para acceder al id, como un string sin el _id                                                               // si el nombre de la variable es igua al de la propiedad lo invoco directamente {place} =>{place:place}       //.Json lo manda a los headers  como Content-Type: application/json
-    response.send(speciality); 
+    response.status(200).json(speciality); 
 
 };
 ////// Create speciality
@@ -51,7 +56,8 @@ const createSpeciality = async (request,response,next) =>{
 let existingSpeciality;
 
     try {                           
-        existingSpeciality = await Speciality.findOne({name: name});
+        existingSpeciality = await Speciality.findOne({name: name.toUpperCase()});
+        console.log(existingSpeciality+'ver si machea x nombre')
     } catch (error) {
         const err = new HttpError('failed, please try again later', 500);
         return next(err);

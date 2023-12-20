@@ -10,7 +10,10 @@ const Turn = require('../models/turns');
 const getDoctors = async (request,response,next) =>{
     let doctors;
     try {   
-        doctors = await Doctor.find().populate('speciality');      
+        doctors = await Doctor.find().populate({
+            path: 'speciality',
+            select: '-_id -description -__v'
+        }).limit(request.query.limit);       
     
 } catch (error) {
 
@@ -26,9 +29,13 @@ const getDoctorById = async (request,response,next) =>{
 
     let doctor;                        
         try {
-            doctor = await Doctor.findById(doctorId).populate('speciality');
+            doctor = await Doctor.findById(doctorId).populate({
+                path: 'speciality',
+                select: '-_id -description -__v'
+            });
             
         } catch (error) {
+            console.log(error);
             const err = new HttpError('Something went wrong, couldn´t not find a doctor', 500);
             return next(err);
         }
@@ -117,7 +124,7 @@ try {
 
     let doctor;                                               
         try {
-            doctor = await Doctor.findById(doctorId).populate('speciality');  
+            doctor = await Doctor.findById(doctorId);  
             } catch (error) {
                 console.log(error);
             const err = new HttpError('Something went wrong, could not update doctor',500);        
@@ -144,13 +151,16 @@ const getDoctorByIdAndTurnsAvailables = async (request,response,next) =>{
 
     let turns;                        
         try {
-            turns = await Turn.find({doctor:doctorId, status:"available"}).populate('doctor');
+            turns = await Turn.find({doctor:doctorId, status:"available"}).populate({
+                path: 'doctor',
+                select: '-_id -dni -email -speciality -telephone -nacionality -active -timing'
+            }).sort({ date: -1 , hour: 1}).limit(request.query.limit);
             
         } catch (error) {
             const err = new HttpError('Something went wrong, couldn´t not find a turns', 500);
             return next(err);
         }
-    if(!turns){
+    if(!turns|| turns.length === 0){
         const error = new HttpError('Could not find a turns for the provided id',404); 
         return next(error); 
     }
