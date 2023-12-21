@@ -1,6 +1,5 @@
 const { get } = require('mongoose');
 const HttpError = require('../middleweare/http-error'); 
-//const {validationResult} = require('express-validator');
 const Doctor = require ('../models/doctor');
 const Speciality = require('../models/speciality');
 const Turn = require('../models/turns');
@@ -188,6 +187,23 @@ const deleteTurn = async (request, response,next) => {
     }
 }; 
 
+// DELETE CONFIRMED TURN ---OK
+// solo admin
+const deleteConfirmedTurn = async (request, response,next) => { 
+    const turnId = request.params.id
+    let turn;
+    try {
+    turn = await Turn.findById(turnId);
+        if(turn.status === 'confirmed'){
+        const error = new HttpError('Error... this turn is asigned',500); 
+        return next(error); 
+        }
+    } catch (error) {
+        response.status(500).json(error);
+        
+    }
+}; 
+
 // HISTORIAL TURNOS CANCELADOS---
 // historial turnos en estado cancelado...
 const getCancelationsByUser = async (request, response,next) => {
@@ -312,6 +328,7 @@ exports.getTurnByDoctors = getTurnByDoctors;
 exports.createTurn = createTurn;
 exports.updateTurn= updateTurn;
 exports.deleteTurn= deleteTurn;
+exports.deleteConfirmedTurn = deleteConfirmedTurn;
 exports.getCancelationsByUser= getCancelationsByUser;
 exports.getTurnsByPatiens= getTurnsByPatiens;
 exports.reservTurn= reservTurn;

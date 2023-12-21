@@ -14,7 +14,7 @@ const auth = async (request, response, next) => {
     if(!token){
         throw new Error('Authentication falied!'); 
     }
-    const decodedToken = jwt.verify(token,'SECRET_KEY');//verificamos el token, 1° argumento el token de la request y el segundo el exacto token que le puse al controller de user ('supersecret_dont_share)
+    const decodedToken = jwt.verify(token,process.env.SECRET_KEY);//verificamos el token, 1° argumento el token de la request y el segundo el exacto token que le puse al controller de user ('supersecret_dont_share)
             // el decodedToken tiene el userId, el email y el rol
             //request.userData = {userId: decodedToken.userId, }
     
@@ -24,7 +24,8 @@ const auth = async (request, response, next) => {
             
             next();// lo agrego para que  continue con el trayecto y vayan a otras rutas cdonde requieren autentication
 } catch (err) {
-        const error = new HttpError('Authetication failed, no token....', 403);
+    console.log(err);
+        const error = new HttpError('Authetication failed, no token....', 401);
         return next(error);
         }
     

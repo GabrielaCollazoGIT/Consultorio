@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config();
+const dbConfig = require('./config/dbConfig');
 const specialityRoutes = require('./routes/speciality-route');
 const doctorRoutes = require('./routes/doctor-route');
 const userRoutes = require('./routes/user-route');
@@ -24,15 +26,15 @@ app.use((err, req, res, next) => {
     }
 });
 
+app.listen(5000);
 
-
-mongoose.connect('mongodb+srv://consultorio:vortex1234@cluster0.k7wyhqz.mongodb.net/consultorio?retryWrites=true&w=majority')
+/* mongoose.connect('mongodb+srv://consultorio:vortex1234@cluster0.k7wyhqz.mongodb.net/consultorio?retryWrites=true&w=majority')
 .then(() =>{
     app.listen(5000);
 })
 .catch(err =>{
     console.log(err);
-});
+}); */
 
 
 

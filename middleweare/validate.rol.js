@@ -1,7 +1,8 @@
 const adminValidate = async (request, response, next) => {
+    console.log(request.user);
     const {rol} = request.user;
     if(!request.user){
-        return response.status(500).send({message: 'Invalid token'});
+        return response.status(401).send({message: 'Invalid token'});
     }
 
     if(rol !== 'ADMIN') {
@@ -10,4 +11,18 @@ const adminValidate = async (request, response, next) => {
     }
     next();
 };
-module.exports = adminValidate;
+
+const userValidate = async (request, response, next) => {
+    console.log(request.user);
+    const {rol} = request.user;
+    if(!request.user){
+        return response.status(401).send({message: 'Invalid token'});
+    }
+
+    if(rol !== 'USER') {
+        return response.status(403).send({message: 'Forbidden access'});
+
+    }
+    next();
+};
+module.exports = {adminValidate, userValidate};

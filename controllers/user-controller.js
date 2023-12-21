@@ -31,7 +31,7 @@ let existingUser;
     }      
     
         if(existingUser){
-            const error = new HttpError('User exist already, please loging instead',422);
+            const error = new HttpError('User exist already, please loging instead',400);
             return next(error);
         }
         
@@ -79,7 +79,7 @@ const login = async (request,response,next) =>{
                                                                        //   throw new HttpError('Could identidy user, credentials seem to be wrong',401);// 401 autentication faild
     }                                                                                         // }
     if(!existingUser){
-        const err = new HttpError('Invalid credentials, could not log you in.', 403);
+        const err = new HttpError('Invalid credentials, could not log you in.', 401);
         return next(err);
     }
 
@@ -96,10 +96,13 @@ try {
         return next(err);
     }
 
-    let token;  
+    let token; 
+
+
+
     try {
                     // payload                                       // el 2° argumento es la key privada(que solo el servidor sabe), usar ma misma key, sino se generaran diferentes tokens
-    token = jwt.sign({userId: existingUser.id,rol:existingUser.rol, email: existingUser.email},'SECRET_KEY',{expiresIn:'2h'} ); // devuelve un string q es el token, 1° argumento es el dato q quiero codificar en el token
+    token = jwt.sign({userId: existingUser.id,rol:existingUser.rol, email: existingUser.email},process.env.SECRET_KEY,{expiresIn:'2h'} ); // devuelve un string q es el token, 1° argumento es el dato q quiero codificar en el token
         console.log(token);
     } catch (err) {
         console.log(err);
@@ -120,10 +123,10 @@ const forgotPassword = async (request,response,next) => {
         const user = await User.findOne({ email });
     
         if (!user) {
-            return res.status(404).json({ message: 'User not fount' });
+            return response.status(404).json({ message: 'User not fount' });
         }
     
-        const resetToken = jwt.sign({ userId: user._id }, 'SECRET_KEY', { expiresIn: '1h' });
+        const resetToken = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1h' });
     
         const transporter = nodemailer.createTransport({
             service: 'hotmail',
@@ -165,7 +168,7 @@ const recoveryPassword = async (request,response,next) => {
         response.status(400).json({message:'All fields are required'});
     }
 
-    const decodedToken = jwt.verify(resetToken, 'SECRET_KEY');
+    const decodedToken = jwt.verify(resetToken, process.env.SECRET_KEY);
         try {
         
         // Verificar el token

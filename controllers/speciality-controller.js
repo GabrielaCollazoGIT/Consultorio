@@ -1,6 +1,5 @@
 const { default: mongoose } = require("mongoose");
 const HttpError = require('../middleweare/http-error'); 
-const {validationResult} = require('express-validator');
 const Speciality = require('../models/speciality');
 
 
@@ -45,12 +44,6 @@ const getSpecialityById = async (request,response,next) =>{
 };
 ////// Create speciality
 const createSpeciality = async (request,response,next) =>{
-    const errors = validationResult(request); 
-    console.log(errors);
-    if(!errors.isEmpty()){
-
-        return next (new HttpError('Invalid input passed, please check your data.', 422));
-    } 
 
     const  {name,description} = request.body;  
 let existingSpeciality;
@@ -87,21 +80,18 @@ let existingSpeciality;
 /// Update speciality
 
 const updateSpeciality = async (request,response,next) =>{
-    
-    const errors = validationResult(request); 
-    if(!errors.isEmpty()){
-        return next( new HttpError('Invalid input passed, please check your data.', 422));
-    }
+
     console.log('request in Update');
 
     const specialityId = request.params.id;
     console.log(specialityId);
-    const { name, description}= request.body;
+    const { description, name} = request.body;
     
     let speciality;                                               
         try {
             speciality = await Speciality.findById(specialityId);  
             } catch (error) {
+                console.log(error);
             const err = new HttpError('Something went wrong, could not update speciality',500);        
             return next(err);    
         }                                
@@ -113,10 +103,11 @@ const updateSpeciality = async (request,response,next) =>{
     try {
         await speciality.save();
     } catch (error) {
+        console.log(error);
         const err = new HttpError('Something went wrong, could not update speciality',500);        
             return next(err); 
     }
-    response.status(200).json({speciality: speciality.toObject({getters: true}) });
+    response.status(200).json(speciality);
 };
 /////// Delete speciality
 const deleteSpeciality = async (request,response,next) =>{
