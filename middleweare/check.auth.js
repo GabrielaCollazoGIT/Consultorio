@@ -19,6 +19,8 @@ const auth = async (request, response, next) => {
             //request.userData = {userId: decodedToken.userId, }
     
             const user = await User.findOne({_id: decodedToken.userId});
+            console.log('aca es el undefinded?... en chech uth'+user);
+            
             request.userToken = token 
             request.user = user;
             

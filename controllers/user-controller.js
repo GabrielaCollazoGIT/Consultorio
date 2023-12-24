@@ -18,9 +18,25 @@ const getUsers = async (request,response,next) =>{
     response.send(users);
 }
 
+/* const getUserById = async (request,response,next) =>{
+    //llaves abiertas y - el campo no quiero ver quiero que me devuevla todo menos la contraseña
+    let user;
+    try {
+    user = await User.findOne({_id:request.userId},'-password');  
+
+} catch (error) {
+    console.log(error);
+    const err = new HttpError('Fetching user failed, please try again later', 500);
+        return next(err);
+    }
+    response.send({email: user.email});
+}
+ */
+
 const signUp = async (request,response,next) =>{
 
     const  {userName,email,password,rol,dni} = request.body; 
+
 let existingUser;
 
     try {                           
@@ -68,7 +84,7 @@ let existingUser;
 
 const login = async (request,response,next) =>{
     const {email,password} = request.body; 
-
+    
     let existingUser;
 
     try {                           
@@ -98,19 +114,17 @@ try {
 
     let token; 
 
-
-
     try {
                     // payload                                       // el 2° argumento es la key privada(que solo el servidor sabe), usar ma misma key, sino se generaran diferentes tokens
     token = jwt.sign({userId: existingUser.id,rol:existingUser.rol, email: existingUser.email},process.env.SECRET_KEY,{expiresIn:'2h'} ); // devuelve un string q es el token, 1° argumento es el dato q quiero codificar en el token
-        console.log(token);
+
     } catch (err) {
         console.log(err);
         const error = new HttpError('Login failded please try again, token error...',500);
         return next(error);
     } 
 
-    response.status(200).json({userId: existingUser.id,rol:existingUser.rol, email:existingUser.email, token: token});
+    response.status(200).json({userId: existingUser.id,rol:existingUser.rol, email:existingUser.email, token});
 
 };
 

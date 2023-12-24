@@ -7,10 +7,11 @@ const doctorRoutes = require('./routes/doctor-route');
 const userRoutes = require('./routes/user-route');
 const turnRoutes = require('./routes/turn-route');
 const HttpError = require('./middleweare/http-error');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 
 app.use('/api/speciality',specialityRoutes);
 app.use('/api/doctors',doctorRoutes);
