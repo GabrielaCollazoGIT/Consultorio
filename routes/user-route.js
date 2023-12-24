@@ -12,6 +12,7 @@ router.post('/login', userController.login);
 router.post('/forgot-password', userController.forgotPassword);
 
 router.use(auth);
+router.get('/:id', userController.getUserById);
 router.patch('/new-password', userController.recoveryPassword);
 
 router.use(validateRol.adminValidate);

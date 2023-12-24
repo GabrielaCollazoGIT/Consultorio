@@ -17,21 +17,21 @@ const getUsers = async (request,response,next) =>{
     }
     response.send(users);
 }
-
-/* const getUserById = async (request,response,next) =>{
+const getUserById = async (request,response,next) =>{
     //llaves abiertas y - el campo no quiero ver quiero que me devuevla todo menos la contraseña
+    
     let user;
     try {
-    user = await User.findOne({_id:request.userId},'-password');  
-
+    user = await User.findOne({_id:request.user.id},'-password');  
+        console.log(user);
 } catch (error) {
     console.log(error);
     const err = new HttpError('Fetching user failed, please try again later', 500);
         return next(err);
     }
-    response.send({email: user.email});
+    response.send({email: user.email , rol:user.rol });
 }
- */
+
 
 const signUp = async (request,response,next) =>{
 
@@ -211,6 +211,7 @@ const recoveryPassword = async (request,response,next) => {
 
 exports.signUp = signUp;
 exports.login = login;
+exports.getUserById =  getUserById;
 exports.forgotPassword = forgotPassword;
 exports.recoveryPassword = recoveryPassword;
 exports.getUsers = getUsers;
