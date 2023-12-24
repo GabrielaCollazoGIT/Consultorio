@@ -4,6 +4,8 @@ const Doctor = require ('../models/doctor');
 const Speciality = require('../models/speciality');
 const Turn = require('../models/turns');
 const History = require('../models/history');
+const Patient = require('../models/patient');
+const { discriminators } = require('../models/user');
 
 
 const getTurnById = async (request, response,next) => {
@@ -11,7 +13,7 @@ const getTurnById = async (request, response,next) => {
     let turn;
 try {
     turn = await Turn.findById({_id: turnId})
-    .select('-cancelations -createdAt -updatedAt')
+    .select('-createdAt -updatedAt')
     .populate({
         path: 'doctor',
         select: '-_id -dni -email -speciality -telephone -nacionality -active -timing'
@@ -27,7 +29,22 @@ try {
        return next( new HttpError('Could not find a turn for the provided id',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
     } // uso el next cuando es async
 
-    response.status(200).json(turn);
+    let patient;
+try {
+    patient = await Patient.findOne({dni: turn.dni}).select('-clinicalHistory -rol -createdAt -updatedAt');
+    
+    console.log(patient);
+} catch (error) {
+    const err = new HttpError('Fetching turn failed, please try again later',500);
+    return next(err);
+}
+
+if(!patient ){
+    return next( new HttpError('Could not find a patient for the provided turn',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
+ } 
+
+
+    response.status(200).json({turn, patient});
 
 };    
 
@@ -37,7 +54,7 @@ const getAllTurns = async (request, response,next) => {
     
     let turns;
 try {
-    turns = await Turn.find().select('-cancelations -createdAt -updatedAt')
+    turns = await Turn.find().select(' -createdAt -updatedAt')
     .populate({
         path: 'doctor',
         select: '-_id -dni -email -speciality -telephone -nacionality -active -timing'
@@ -68,7 +85,7 @@ const getTurnByDoctors  = async (request, response,next) => {
     const doctorId = request.params.id;
     let turnsByDoctor;
 try {
-    turnsByDoctor = await Turn.find({doctor: doctorId }).select('-cancelations -createdAt -updatedAt')
+    turnsByDoctor = await Turn.find({doctor: doctorId }).select(' -createdAt -updatedAt')
     .sort({ date: -1 , hour: 1}).limit(request.query.limit);
     console.log(turnsByDoctor);
 } catch (error) {
@@ -168,9 +185,10 @@ const updateTurn = async (request, response,next) => {
             {new: true}
         );
         response.status(200).json(updatedTurn);
-    } catch (error) {
-        console.log(error);
-        next(error);
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError('Update turn failded please try again...',500);
+        return next(error);
     }
 }; 
 
@@ -234,7 +252,7 @@ const getTurnsByPatiens = async (request, response,next) => {
     let turns;
 try {
     turns = await Turn.find({dni: dni, status:"confirmed"})
-    .select('-cancelations -createdAt -updatedAt')
+    .select(' -createdAt -updatedAt')
     .populate({
         path: 'doctor',
         select: '-_id -dni -email -speciality -telephone -nacionality -active -timing'
@@ -257,6 +275,7 @@ try {
 const reservTurn  = async (request, response,next) => {
     
         const turnId = request.params.id;
+        const {dni} = request.body.dni;
         let getTurn;
     
         try {
@@ -270,8 +289,22 @@ const reservTurn  = async (request, response,next) => {
         if (!getTurn || getTurn.status !== "available") {
             return next(new HttpError('This turn is not available', 500));
         }
+        let getPatient;
     
-        getTurn.dni = request.body.dni;
+        try {
+            getPatient = await Patient.findOne({dni:dni});
+            console.log(getPatient);
+        } catch (error) {
+            console.error(error) + 'antes de guardar';
+            return response.status(500).json("Internal server error, please try again later...");
+        }
+    
+        if (!getPatient) {
+            return next(new HttpError('Don´t exist a patient to reserv.. please register first', 500));
+        }
+
+    
+        getTurn.dni = dni;
         getTurn.status = "confirmed";
     
         try {
@@ -291,7 +324,7 @@ const canceledTurn = async (request, response, next) => {
     let turn;
 
     try {
-        turn = await Turn.findOneAndUpdate({ dni: request.params.dni, date: request.body.date }).populate('doctor');
+        turn = await Turn.findOne({ dni: request.params.dni, date: request.body.date }).populate('doctor');
     } catch (error) {
         console.error(error);
         return response.status(500).json("Internal server error, please try again later...");
@@ -311,6 +344,8 @@ const canceledTurn = async (request, response, next) => {
         await History.create({
             doctor: turn.doctor.lastname + " " + turn.doctor.name  ,
             speciality: turn.speciality,
+            date: turn.date,
+            hour:turn.hour,
             dni: request.params.dni,
         });
     } catch (error) {

@@ -6,6 +6,7 @@ const specialityRoutes = require('./routes/speciality-route');
 const doctorRoutes = require('./routes/doctor-route');
 const userRoutes = require('./routes/user-route');
 const turnRoutes = require('./routes/turn-route');
+const patientRoutes = require('./routes/patient-route')
 const HttpError = require('./middleweare/http-error');
 const cors = require('cors');
 
@@ -17,6 +18,7 @@ app.use('/api/speciality',specialityRoutes);
 app.use('/api/doctors',doctorRoutes);
 app.use('/api/users',userRoutes);
 app.use('/api/turns',turnRoutes);
+app.use('/api/patient',patientRoutes);
 
 app.use((err, req, res, next) => {
     if (err instanceof HttpError) {

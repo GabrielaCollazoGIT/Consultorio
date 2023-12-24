@@ -1,5 +1,5 @@
 const express = require('express'); 
-const {check} = require('express-validator');
+
 const specialityController = require('../controllers/speciality-controller');
 
 const router = express.Router();

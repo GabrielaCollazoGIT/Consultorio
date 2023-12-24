@@ -8,7 +8,6 @@ const turnSchema = new mongoose.Schema({
     doctor: { type: mongoose.Types.ObjectId, required:true, ref: 'Doctor'}, 
    // user:{type:mongoose.Types.ObjectId, required:true, ref:'User'},
     dni:{type:String, require: true, default:undefined},
-    //cancelations: [{ date: { type: Date, default: Date.now }, user:{type:String}, status:{type:String, default:"Cancelled"} }],
     status: {
         type: String,
         enum: [
