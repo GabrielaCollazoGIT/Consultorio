@@ -29,7 +29,7 @@ const getUserById = async (request,response,next) =>{
     const err = new HttpError('Fetching user failed, please try again later', 500);
         return next(err);
     }
-    response.send({email: user.email , rol:user.rol });
+    response.send({email: user.email ,userId:user.id, rol:user.rol });
 }
 
 

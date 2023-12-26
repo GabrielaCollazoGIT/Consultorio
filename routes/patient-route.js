@@ -1,9 +1,12 @@
 const express = require('express'); 
 
 const patientController = require('../controllers/patient-controller');
-
+const auth = require('../middleweare/check.auth');
+const validateRol = require('../middleweare/validate.rol')
 const router = express.Router();
 
+router.use(auth);
+router.use(validateRol.adminValidate)
 router.get('/',patientController.getPatients);
 
 router.get('/:id',patientController.getPatientById);
