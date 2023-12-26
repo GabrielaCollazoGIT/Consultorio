@@ -7,9 +7,16 @@ const auth = async (request, response, next) => {
     if(request.method === 'OPTIONS'){
         return next(); // // esto es para que el flujo siga, y no se detenga
     }
+    let token
     try {        
-                                          // usamos el split para separar lo que viene en el array, separado por el espacio, el barer y el token, y accedemos al segundo elemento [1]
-    const token = request.headers.authorization.split(' ')[1]; // en el Cors los aceptamos, accedemos a extraer datos y obtenemos el token ... Authorization : 'Bearer TOKEN' 
+        console.log(request.headers.reset);
+        if(request.headers.reset){
+            token = request.headers.reset;
+        }else{
+            console.log(request.headers.authorization);                                 // usamos el split para separar lo que viene en el array, separado por el espacio, el barer y el token, y accedemos al segundo elemento [1]
+            token = request.headers.authorization.split(' ')[1]; // en el Cors los aceptamos, accedemos a extraer datos y obtenemos el token ... Authorization : 'Bearer TOKEN' 
+        }
+    
 
     if(!token){
         throw new Error('Authentication falied!'); 

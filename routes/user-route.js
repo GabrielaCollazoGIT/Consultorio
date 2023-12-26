@@ -10,8 +10,9 @@ router.post('/signup', userController.signUp);
 router.post('/login', userController.login);
 
 router.post('/forgot-password', userController.forgotPassword);
-router.patch('/new-password', userController.recoveryPassword);
 router.use(auth);
+router.patch('/new-password', userController.recoveryPassword);
+
 router.get('/info', userController.getUserById);
 
 
