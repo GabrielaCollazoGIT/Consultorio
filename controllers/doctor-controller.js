@@ -72,7 +72,7 @@ try {
     }      
     
         if(existingDoctor){
-            const error = new HttpError('doctor exist already, please choose another instead',422);
+            const error = new HttpError('doctor exist already, please choose another instead',409);
             return next(error);
         }
         
@@ -124,7 +124,7 @@ const updateDoctor = async (request,response,next) =>{
     doctor.telephone = telephone;
 
     if (doctor.speciality.some((s) => s._id.toString() === specialityFind.id)) {
-        const err = new HttpError('The Speciality already is saved in this Doctor, please try another', 404);
+        const err = new HttpError('The Speciality already is saved in this Doctor, please try another', 409);
         return next(err);
     }
 

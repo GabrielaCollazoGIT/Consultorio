@@ -137,7 +137,7 @@ let existingTurn;
     }      
     
         if(existingTurn){
-            const error = new HttpError('turn exist already, please choose another instead',500);
+            const error = new HttpError('turn exist already, please choose another instead',409);
             return next(error);
         } 
 
