@@ -1,11 +1,11 @@
-const { get } = require('mongoose');
+
 const HttpError = require('../middleweare/http-error'); 
 const Doctor = require ('../models/doctor');
 const Speciality = require('../models/speciality');
 const Turn = require('../models/turns');
 const History = require('../models/history');
 const Patient = require('../models/patient');
-const { discriminators } = require('../models/user');
+
 
 
 const getTurnById = async (request, response,next) => {
@@ -29,22 +29,9 @@ try {
        return next( new HttpError('Could not find a turn for the provided id',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
     } // uso el next cuando es async
 
-    let patient;
-try {
-    patient = await Patient.findOne({dni: turn.dni}).select('-clinicalHistory -rol -createdAt -updatedAt');
-    
-    console.log(patient);
-} catch (error) {
-    const err = new HttpError('Fetching turn failed, please try again later',500);
-    return next(err);
-}
-
-if(!patient ){
-    return next( new HttpError('Could not find a patient for the provided turn',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
- } 
 
 
-    response.status(200).json({turn, patient});
+    response.status(200).json({turn});
 
 };    
 
@@ -86,7 +73,10 @@ const getTurnByDoctors  = async (request, response,next) => {
     let turnsByDoctor;
 try {
     turnsByDoctor = await Turn.find({doctor: doctorId }).select(' -createdAt -updatedAt')
-    .sort({ date: -1 , hour: 1}).limit(request.query.limit);
+    .populate({
+        path: 'doctor',
+        select: '-_id -dni -email -speciality -telephone -nacionality -active -timing'
+    }).sort({ date: -1 , hour: 1}).limit(request.query.limit);
     console.log(turnsByDoctor);
 } catch (error) {
     console.log(error);
@@ -156,7 +146,6 @@ let existingTurn;
         hour,
         speciality:specialityFind,
         doctor:doctorFind,
-        cancelations:[],
         dni
     
 
@@ -196,9 +185,16 @@ const updateTurn = async (request, response,next) => {
 // solo admin
 const deleteTurn = async (request, response,next) => { 
     const turnId = request.params.id
+    let turn;
     try {
-        await Turn.findByIdAndDelete(turnId);
-        response.status(200).json("Deleted Turn");
+    turn = await Turn.findById(turnId);
+        if(!turn){
+        const error = new HttpError('Error... this turn not exist',500); 
+        return next(error); 
+        }
+
+        await Turn.deleteOne(turn);
+        response.status(200).json('deleted turn...');
     } catch (error) {
         response.status(500).json(error);
         
@@ -292,19 +288,8 @@ const reservTurn  = async (request, response,next) => {
             return next(new HttpError('This turn is not available', 500));
         }
 
-        let getPatient;
-    
-        try {
-            getPatient = await Patient.findOne({dni:dni});
-            console.log(getPatient);
-        } catch (error) {
-            console.error(error) + 'antes de guardar';
-            return response.status(500).json("Internal server error, please try again later...");
-        }
-    
-        if (!getPatient) {
-            return next(new HttpError('Don´t exist a patient to reserv this turn.. please register first', 500));
-        }
+
+        
 
     
         getTurn.dni = dni;
@@ -347,18 +332,10 @@ const canceledTurn = async (request, response, next) => {
     }
     console.log("no hay turno"+turn);
     console.log(request.params.dni);
-    let patient
-
-    try {
-        patient = await Patient.findOne({ dni: dni});
-    } catch (error) {
-        console.error(error);
-        return response.status(500).json("Internal server error, please try again later...");
-    }
-    console.log(patient)
 
 
-    if (turn.dni !== patient.dni) {
+
+    if (turn.dni !== dni) {
         console.log(turn);
         return response.status(404).json({ message: 'You can´t cancel this turn...' });
     } 

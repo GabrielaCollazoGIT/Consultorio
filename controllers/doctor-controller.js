@@ -104,47 +104,42 @@ try {
 
 const updateDoctor = async (request,response,next) =>{
     
-    
     console.log('request in Update');
-
+    
     const doctorId = request.params.id;
     console.log(doctorId);
-    const {email,telephone,speciality}= request.body;
+    const { email, telephone, speciality } = request.body;
 
-let specialityFind;
-
-try {
-    specialityFind= await Speciality.findById(speciality);
-
-} catch (error) {
-    console.log(error);
-    const err = new HttpError('Updating doctor failed, please try again',500);        
-        return next(err); 
-}
-
-    let doctor;                                               
-        try {
-            doctor = await Doctor.findById(doctorId);  
-            } catch (error) {
-                console.log(error);
-            const err = new HttpError('Something went wrong, could not update doctor',500);        
-            return next(err);    
-        }                                
-        doctor.email = email;
-        doctor.telephone = telephone;
-        doctor.speciality.push(specialityFind);
-                        
     try {
-        await doctor.save();
-    } catch (error) {
-        console.log(error);
-        const err = new HttpError('Something went wrong, could not update doctor',500);        
-            return next(err); 
+    const specialityFind = await Speciality.findById(speciality);
+
+    let doctor = await Doctor.findById(doctorId).lean();
+
+    if (!doctor) {
+        const err = new HttpError('Doctor not found', 404);
+        return next(err);
     }
 
-    response.status(200).send(doctor);
-};
+    doctor.email = email;
+    doctor.telephone = telephone;
 
+    if (doctor.speciality.some((s) => s._id.toString() === specialityFind.id)) {
+        const err = new HttpError('The Speciality already is saved in this Doctor, please try another', 404);
+        return next(err);
+    }
+
+    doctor.speciality.push(specialityFind);
+
+      await Doctor.findByIdAndUpdate(doctorId, { $set: doctor }); // Actualizar el doctor
+
+    response.status(200).send(doctor);
+    } catch (error) {
+    console.log(error);
+    const err = new HttpError('Something went wrong, could not update doctor', 500);
+    return next(err);
+    }
+
+};
 /// ver de que envie solo nombre, apellido y especialidad del medico
 const getDoctorByIdAndTurnsAvailables = async (request,response,next) =>{
     const doctorId = request.params.id;
