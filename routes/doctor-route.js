@@ -5,10 +5,10 @@ const validateRol = require('../middleweare/validate.rol');
 
 const router = express.Router();
 
+router.use(auth);
 router.get('/',doctorController.getDoctors);
 router.get('/available/:id',doctorController.getDoctorByIdAndTurnsAvailables);
 
-router.use(auth);
 router.use(validateRol.adminValidate);
 
 router.get('/:id',doctorController.getDoctorById);

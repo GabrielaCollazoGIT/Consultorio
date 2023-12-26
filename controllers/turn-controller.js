@@ -41,7 +41,7 @@ try {
 
 if(!patient ){
     return next( new HttpError('Could not find a patient for the provided turn',404));  // con el return me aseguro que el bloque de codigo que sigue no se ejecute...
- } 
+} 
 
 
     response.status(200).json({turn, patient});
@@ -85,8 +85,12 @@ const getTurnByDoctors  = async (request, response,next) => {
     const doctorId = request.params.id;
     let turnsByDoctor;
 try {
+    
     turnsByDoctor = await Turn.find({doctor: doctorId }).select(' -createdAt -updatedAt')
-    .sort({ date: -1 , hour: 1}).limit(request.query.limit);
+    .populate({
+        path: 'doctor',
+        select: '-_id -dni -email -speciality -telephone -nacionality -active -timing'
+    }).sort({ date: -1 , hour: 1}).limit(request.query.limit);
     console.log(turnsByDoctor);
 } catch (error) {
     console.log(error);
@@ -147,7 +151,7 @@ let existingTurn;
     }      
     
         if(existingTurn){
-            const error = new HttpError('turn exist already, please choose another instead',500);
+            const error = new HttpError('turn exist already',409);
             return next(error);
         } 
 
@@ -156,7 +160,6 @@ let existingTurn;
         hour,
         speciality:specialityFind,
         doctor:doctorFind,
-        cancelations:[],
         dni
     
 
@@ -196,9 +199,16 @@ const updateTurn = async (request, response,next) => {
 // solo admin
 const deleteTurn = async (request, response,next) => { 
     const turnId = request.params.id
+    let turn;
     try {
-        await Turn.findByIdAndDelete(turnId);
-        response.status(200).json("Deleted Turn");
+    turn = await Turn.findById(turnId);
+        if(!turn){
+        const error = new HttpError('Error... this turn not exist',500); 
+        return next(error); 
+        }
+
+        await Turn.deleteOne(turn);
+        response.status(200).json('deleted turn...');
     } catch (error) {
         response.status(500).json(error);
         
@@ -249,6 +259,10 @@ try {
 //  es  la lista de turnos de ese paciente.
 const getTurnsByPatiens = async (request, response,next) => {
     const dni = request.body.dni;
+    
+    if(dni!==request.user.dni){
+        return next(new HttpError('You don´t have permitions to see the turns of this patient..', 403));
+    } 
     let turns;
 try {
     turns = await Turn.find({dni: dni, status:"confirmed"})
@@ -358,7 +372,7 @@ const canceledTurn = async (request, response, next) => {
     console.log(patient)
 
 
-    if (turn.dni !== patient.dni) {
+    if (turn.dni !== patient.dni.toString()) {
         console.log(turn);
         return response.status(404).json({ message: 'You can´t cancel this turn...' });
     } 

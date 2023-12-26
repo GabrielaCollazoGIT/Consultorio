@@ -58,7 +58,7 @@ let existingPatient;
     }      
     
         if(existingPatient){
-            const error = new HttpError('Patient exist already, please choose another instead',422);
+            const error = new HttpError('Patient exist already, please choose another instead',409);
             return next(error);
         }
         

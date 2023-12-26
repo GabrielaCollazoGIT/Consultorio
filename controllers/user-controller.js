@@ -47,7 +47,7 @@ let existingUser;
     }      
     
         if(existingUser){
-            const error = new HttpError('User exist already, please loging instead',400);
+            const error = new HttpError('User exist already, please loging instead',409);
             return next(error);
         }
         

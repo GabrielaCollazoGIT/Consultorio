@@ -57,7 +57,7 @@ let existingSpeciality;
     }      
     
         if(existingSpeciality){
-            const error = new HttpError('Speciality exist already, please choose another instead',422);
+            const error = new HttpError('Speciality exist already, please choose another instead',409);
             return next(error);
         }
         

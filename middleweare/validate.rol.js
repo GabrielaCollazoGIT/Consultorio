@@ -19,7 +19,7 @@ const userValidate = async (request, response, next) => {
         
         return response.status(401).send({message: 'Invalid token'});
     }
-// if(rol !== 'USER'||rol !=='PATIENT') {
+
     if(rol !== 'USER') {
         return response.status(403).send({message: 'Forbidden access'});
 

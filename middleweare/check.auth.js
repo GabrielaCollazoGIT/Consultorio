@@ -11,6 +11,8 @@ const auth = async (request, response, next) => {
                                           // usamos el split para separar lo que viene en el array, separado por el espacio, el barer y el token, y accedemos al segundo elemento [1]
     const token = request.headers.authorization.split(' ')[1]; // en el Cors los aceptamos, accedemos a extraer datos y obtenemos el token ... Authorization : 'Bearer TOKEN' 
 
+
+
     if(!token){
         throw new Error('Authentication falied!'); 
     }
@@ -19,7 +21,7 @@ const auth = async (request, response, next) => {
             // el decodedToken tiene el userId, el email y el rol
             //request.userData = {userId: decodedToken.userId, }
             // es el usuario que genero el turno, y esta autencado, y me lo devuelven los haders 
-            const user = await User.findOne({_id: decodedToken.userId}); 
+            const user = await User.findOne({_id: decodedToken.userId}, '-password'); 
             console.log('aca es el undefinded?... en chech uth'+user);
             // esta info es para las rutas que siguen el flujo y necesitan esta info
             request.userToken = token 
