@@ -1,0 +1,1249 @@
+{
+	"info": {
+		"_postman_id": "f6514526-8a54-422c-b640-62f86f0cfcec",
+		"name": "Consultorio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30474375"
+	},
+	"item": [
+		{
+			"name": "Speciality",
+			"item": [
+				{
+					"name": "getSpecialities",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU2MjAyMywiZXhwIjoxNzAzNTY5MjIzfQ.frdih7BLzXuqXSDYdeK5kD6EK0-Jl-y5B3QDjmU9zDQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/speciality?limit=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"speciality"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createSpeciality",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU2MjAyMywiZXhwIjoxNzAzNTY5MjIzfQ.frdih7BLzXuqXSDYdeK5kD6EK0-Jl-y5B3QDjmU9zDQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Dermatologia\",\n    \"description\": \"Especialidad dedicada al cuidado de la piel, y enfermedades derivadas de estas \"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/speciality/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"speciality",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateSpeciality",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjE5ODksImV4cCI6MTcwMzU2OTE4OX0.4QyiKoyYIVXHW9wAj2k4OHaZIoCj70PmFuCBVJpOU7Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"DERMATOLOGIA\",\n    \"description\":\"Especialidad dedicada al cuidado de la piel,enfermedades derivadas de estas, pelo y uñas \"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/speciality/658345522814e954289b6db0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"speciality",
+								"658345522814e954289b6db0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSpecialityById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU2MjAyMywiZXhwIjoxNzAzNTY5MjIzfQ.frdih7BLzXuqXSDYdeK5kD6EK0-Jl-y5B3QDjmU9zDQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/speciality/658345522814e954289b6db0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"speciality",
+								"658345522814e954289b6db0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteSpeciality",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU2MjAyMywiZXhwIjoxNzAzNTY5MjIzfQ.frdih7BLzXuqXSDYdeK5kD6EK0-Jl-y5B3QDjmU9zDQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/speciality/6581fe3526a537ea15abe6e5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"speciality",
+								"6581fe3526a537ea15abe6e5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patients",
+			"item": [
+				{
+					"name": "getPatients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU3MDU4OCwiZXhwIjoxNzAzNTc3Nzg4fQ.4eGT7dHkQ0iKnWhnGZswcji33RdqVJVcwmDT7LRcSS4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/patient?limit=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"patient"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createPatients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU3MDU4OCwiZXhwIjoxNzAzNTc3Nzg4fQ.4eGT7dHkQ0iKnWhnGZswcji33RdqVJVcwmDT7LRcSS4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Antonella Nicolay\",\n    \"email\":\"anto@gmail.com\",\n    \"dni\":31453678,\n    \"telephone\":3516864406\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/patient/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"patient",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatePatients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjE5ODksImV4cCI6MTcwMzU2OTE4OX0.4QyiKoyYIVXHW9wAj2k4OHaZIoCj70PmFuCBVJpOU7Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Gabriela Collazo\",\n        \"email\": \"ga@gmail.com\",\n        \"rol\": \"PATIENT\",\n        \"dni\": 32003577,\n        \"telephone\": 29966423856\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/patient/658871d00d94bf5889ff2387",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"patient",
+								"658871d00d94bf5889ff2387"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPatientById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/patient/658871d00d94bf5889ff2387",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"patient",
+								"658871d00d94bf5889ff2387"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePatient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/patient/65886cb12070732950cb10e1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"patient",
+								"65886cb12070732950cb10e1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Doctors",
+			"item": [
+				{
+					"name": "getDoctors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjkwMzAsImV4cCI6MTcwMzU3NjIzMH0.zZ73TNNbGEvQ41YN0-HY5CImK1Ii_pwlFi12QATOo2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/doctors?limit=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"doctors"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAvailableTurnsByDoctor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjE5ODksImV4cCI6MTcwMzU2OTE4OX0.4QyiKoyYIVXHW9wAj2k4OHaZIoCj70PmFuCBVJpOU7Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/doctors/available/6580833b142ac99a9319aab1?limit=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"doctors",
+								"available",
+								"6580833b142ac99a9319aab1"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDoctorById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjQ5NTIsImV4cCI6MTcwMzU3MjE1Mn0.y0YyZAwSuT-uPyKkGc7fD-HwQ2cVyM3g1Jd9x03zWt0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/doctors/657cba0041fb8d61884672fb",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"doctors",
+								"657cba0041fb8d61884672fb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createDoctor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(responseCode.code === 200){",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.collectionVariables.set(\"accessToken\",",
+									"        jsonData.access_token)",
+									"",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzEzMTkyNCwiZXhwIjoxNzAzMTM5MTI0fQ.GAJIMMzLvrNvbj5gT2iMeGD5_5-Lymgq3L1SDp5B78o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"name\":\"Roberto\",\n        \"lastname\":\"Carlos\",\n        \"dni\":32563355,\n        \"email\":\"Marce@hotmail.com\",\n        \"timing\":[\"09:00\", \"18:00\"],\n        \"telephone\":17435234,\n        \"nacionality\":\"Argentino\",\n        \"speciality\":\"65791ba7015b5e14c57de7be\",\n        \"active\":\"true\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/doctors/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"doctors",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateDoctor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU2NTM3MiwiZXhwIjoxNzAzNTcyNTcyfQ.SjjehLiFt3p9HgLuxPapwVOoyIZa_yWKiHWBV6d5uYI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \n        \"speciality\":\"658345522814e954289b6db0\"\n        \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/doctors/657cba0041fb8d61884672fb",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"doctors",
+								"657cba0041fb8d61884672fb"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userName\":\"fac\",\n    \"email\":\"vortex1223@hotmail.com\",\n    \"password\":\"fac32421\",\n    \"dni\":47394321\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTdhMmU4OGNhZTZkMzEyM2JlZjZiMjkiLCJpYXQiOjE3MDI1MDYxMjF9.aw3Vhg-orUElGg93zK5lF1gc1uyJHCeyz9w6ETy2Q3M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"gabi137@gmail.com\",\n    \"password\":\"nalita\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userInfo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU2NTM3MiwiZXhwIjoxNzAzNTcyNTcyfQ.SjjehLiFt3p9HgLuxPapwVOoyIZa_yWKiHWBV6d5uYI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"gabi137@gmail.com\",\n    \"password\":\"nalita\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sendEmailRecovery",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"vortex_recupero@hotmail.com\"\n   \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/forgot-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resetPassword",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "reset",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgzMDFkYTVjNjNiZGViNGE0YzcyY2EiLCJpYXQiOjE3MDM1NjgxMTgsImV4cCI6MTcwMzU3MTcxOH0.nXiLuZMt1nqpOAjg_qWnof0v5BGAvQEFkKj27TqiNVs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newPassword\":\"nalita\",\n    \"confirmPassword\":\"nalita\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/users/new-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users",
+								"new-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NzI2OTUsImV4cCI6MTcwMzU3OTg5NX0.2GGF7uaSFdqn7g79QTv72i9vubpldAHDpVJhHHbpeMc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/users?limit=6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Turns",
+			"item": [
+				{
+					"name": "getTurnByDoctors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjkwMzAsImV4cCI6MTcwMzU3NjIzMH0.zZ73TNNbGEvQ41YN0-HY5CImK1Ii_pwlFi12QATOo2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/doctor/6580833b142ac99a9319aab1?limit=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"doctor",
+								"6580833b142ac99a9319aab1"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTurnById",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjkwMzAsImV4cCI6MTcwMzU3NjIzMH0.zZ73TNNbGEvQ41YN0-HY5CImK1Ii_pwlFi12QATOo2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/turns/6582622a300e393ac56b9da7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"6582622a300e393ac56b9da7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllTurns",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjkwMzAsImV4cCI6MTcwMzU3NjIzMH0.zZ73TNNbGEvQ41YN0-HY5CImK1Ii_pwlFi12QATOo2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/turns?limit=8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTurnByPatient",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU3MzEwOSwiZXhwIjoxNzAzNTgwMzA5fQ.KwgcBTpQAI73eG3tPQMUEjM1wU4NmkMw5SWg2x3zUa8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dni\":31453678\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/patient/turns?limit=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"patient",
+								"turns"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCancelationsByPatient",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1NjkwMzAsImV4cCI6MTcwMzU3NjIzMH0.zZ73TNNbGEvQ41YN0-HY5CImK1Ii_pwlFi12QATOo2A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dni\":32003577\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/patient/cancelations?limit=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"patient",
+								"cancelations"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createNewTurn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1Njk2MjksImV4cCI6MTcwMzU3NjgyOX0.xEWu7c5wU__O1RtLgTLnzgN_gq8Zsb2BfFb1FdXgiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"date\": \"2023-12-31\",\n    \"hour\":\"14:00\",\n    \"speciality\":\"65791ba7015b5e14c57de7be\",\n    \"doctor\": \"6580833b142ac99a9319aab1\"\n\n  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTurn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1Njk2MjksImV4cCI6MTcwMzU3NjgyOX0.xEWu7c5wU__O1RtLgTLnzgN_gq8Zsb2BfFb1FdXgiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n     \"date\": \"2023-12-18\",\n    \"hour\":\"13:30\",\n    \"speciality\":\"65791ba7015b5e14c57de7be\",\n    \"doctor\": \"657cba0041fb8d61884672fb\"\n\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/658a68e9a87880cc1a3ff21d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"658a68e9a87880cc1a3ff21d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reservTurn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU3MDU4OCwiZXhwIjoxNzAzNTc3Nzg4fQ.4eGT7dHkQ0iKnWhnGZswcji33RdqVJVcwmDT7LRcSS4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dni\":31453678\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/reserv/658a6a23a87880cc1a3ff227",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"reserv",
+								"658a6a23a87880cc1a3ff227"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancelTurn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTc2NTFmM2Y5MzIzZDVkMDUyMTMiLCJyb2wiOiJVU0VSIiwiZW1haWwiOiJhbnRvQGdtYWlsLmNvbSIsImlhdCI6MTcwMzU3MDU4OCwiZXhwIjoxNzAzNTc3Nzg4fQ.4eGT7dHkQ0iKnWhnGZswcji33RdqVJVcwmDT7LRcSS4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"date\":\"2023-12-31\",\n    \"hour\":\"17:00\"\n   \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/turns/cancel/32003577",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"cancel",
+								"32003577"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteTurn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1Njk2MjksImV4cCI6MTcwMzU3NjgyOX0.xEWu7c5wU__O1RtLgTLnzgN_gq8Zsb2BfFb1FdXgiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/turns/658a68e9a87880cc1a3ff21d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"658a68e9a87880cc1a3ff21d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteConfirmedTurn",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdjOTZkODFmM2Y5MzIzZDVkMDUyMGEiLCJyb2wiOiJBRE1JTiIsImVtYWlsIjoiZ2FiaTEzN0BnbWFpbC5jb20iLCJpYXQiOjE3MDM1Njk2MjksImV4cCI6MTcwMzU3NjgyOX0.xEWu7c5wU__O1RtLgTLnzgN_gq8Zsb2BfFb1FdXgiQw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/turns/delete/6582622a300e393ac56b9da7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"turns",
+								"delete",
+								"6582622a300e393ac56b9da7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
