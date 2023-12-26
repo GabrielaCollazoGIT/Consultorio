@@ -14,7 +14,7 @@ const adminValidate = async (request, response, next) => {
 
 const userValidate = async (request, response, next) => {
     console.log(request.user);
-    //const {rol} = request.user;
+    const {rol} = request.user;
     if(!request.user){
         
         return response.status(401).send({message: 'Invalid token'});

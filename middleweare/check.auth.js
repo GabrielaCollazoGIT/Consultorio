@@ -14,13 +14,14 @@ const auth = async (request, response, next) => {
     if(!token){
         throw new Error('Authentication falied!'); 
     }
+            //payload
     const decodedToken = jwt.verify(token,process.env.SECRET_KEY);//verificamos el token, 1° argumento el token de la request y el segundo el exacto token que le puse al controller de user ('supersecret_dont_share)
             // el decodedToken tiene el userId, el email y el rol
             //request.userData = {userId: decodedToken.userId, }
-    
-            const user = await User.findOne({_id: decodedToken.userId});
+            // es el usuario que genero el turno, y esta autencado, y me lo devuelven los haders 
+            const user = await User.findOne({_id: decodedToken.userId}); 
             console.log('aca es el undefinded?... en chech uth'+user);
-            
+            // esta info es para las rutas que siguen el flujo y necesitan esta info
             request.userToken = token 
             request.user = user;
             

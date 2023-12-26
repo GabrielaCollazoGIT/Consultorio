@@ -131,7 +131,7 @@ doctorFind.speciality.forEach(speciality =>{
     if(specialityFind._id.toString() !== speciality._id.toString()){
         console.log('speciality._id'+speciality._id.toString());
         console.log('specialityfind_id'+specialityFind._id);
-        const error = new HttpError('this Doctor don´t have that speciality, please choose another instead',422);
+        const error = new HttpError('this Doctor don´t have that speciality, please choose another instead',500);
         return next(error);
     }
 });
@@ -147,7 +147,7 @@ let existingTurn;
     }      
     
         if(existingTurn){
-            const error = new HttpError('turn exist already, please choose another instead',422);
+            const error = new HttpError('turn exist already, please choose another instead',500);
             return next(error);
         } 
 
@@ -275,7 +275,9 @@ try {
 const reservTurn  = async (request, response,next) => {
     
         const turnId = request.params.id;
-        const {dni} = request.body.dni;
+        const dni = request.body.dni;
+        console.log(dni);
+
         let getTurn;
     
         try {
@@ -289,6 +291,7 @@ const reservTurn  = async (request, response,next) => {
         if (!getTurn || getTurn.status !== "available") {
             return next(new HttpError('This turn is not available', 500));
         }
+
         let getPatient;
     
         try {
@@ -300,7 +303,7 @@ const reservTurn  = async (request, response,next) => {
         }
     
         if (!getPatient) {
-            return next(new HttpError('Don´t exist a patient to reserv.. please register first', 500));
+            return next(new HttpError('Don´t exist a patient to reserv this turn.. please register first', 500));
         }
 
     
@@ -321,10 +324,18 @@ const reservTurn  = async (request, response,next) => {
 
 // reserva de turno, pasar datos del paciente y cambiar a estado cancelado|
 const canceledTurn = async (request, response, next) => {
+    const dni = request.params.dni;
+    console.log(dni);
+    const  {date, hour} = request.body
+    console.log(date);
+    console.log(hour);
+
     let turn;
 
     try {
-        turn = await Turn.findOne({ dni: request.params.dni, date: request.body.date }).populate('doctor');
+        turn = await Turn.findOne({ dni: dni, date:date,
+            hour: hour
+            }).populate('doctor');
     } catch (error) {
         console.error(error);
         return response.status(500).json("Internal server error, please try again later...");
@@ -334,6 +345,24 @@ const canceledTurn = async (request, response, next) => {
         console.log(turn);
         return response.status(404).json({ message: 'Turn not found' });
     }
+    console.log("no hay turno"+turn);
+    console.log(request.params.dni);
+    let patient
+
+    try {
+        patient = await Patient.findOne({ dni: dni});
+    } catch (error) {
+        console.error(error);
+        return response.status(500).json("Internal server error, please try again later...");
+    }
+    console.log(patient)
+
+
+    if (turn.dni !== patient.dni) {
+        console.log(turn);
+        return response.status(404).json({ message: 'You can´t cancel this turn...' });
+    } 
+    
 
     turn.status = 'available';
     turn.dni = undefined;
