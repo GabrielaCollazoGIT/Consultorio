@@ -51,7 +51,7 @@ const getDoctorById = async (request,response,next) =>{
 ////// Create doctor
 const createDoctor = async (request,response,next) =>{
                                                     //timing
-    const  {name,lastname,dni,email,telephone,nacionality,speciality,timing} = request.body;  
+    const  {name,lastname,dni,email,telephone,nacionality,speciality,timing,image} = request.body;  
 let existingDoctor;
 
 let specialityFind; 
