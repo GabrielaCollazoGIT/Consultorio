@@ -45,7 +45,7 @@ const getSpecialityById = async (request,response,next) =>{
 ////// Create speciality
 const createSpeciality = async (request,response,next) =>{
 
-    const  {name,description} = request.body;  
+    const  {name,description,image} = request.body;  
 let existingSpeciality;
 
     try {                           
@@ -63,7 +63,8 @@ let existingSpeciality;
         
     const createSpeciality = new Speciality({
         name,
-        description
+        description,
+        image
 
     });
     console.log(createSpeciality);
@@ -85,7 +86,7 @@ const updateSpeciality = async (request,response,next) =>{
 
     const specialityId = request.params.id;
     console.log(specialityId);
-    const { description, name} = request.body;
+    const { description, name , image} = request.body;
     
     let speciality;                                               
         try {
@@ -98,6 +99,7 @@ const updateSpeciality = async (request,response,next) =>{
 
         speciality.name = name;
         speciality.description = description;
+        speciality.image = image;
                                                 
 
     try {

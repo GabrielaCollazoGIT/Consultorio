@@ -46,6 +46,10 @@ const doctorSchema = new mongoose.Schema({  // con el Schema tenemos acceso a ut
         type:Array, //
         required:true
     },
+    image:{
+        type:String,
+        required:true
+    },
 
 })
 

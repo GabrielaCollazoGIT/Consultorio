@@ -83,6 +83,7 @@ try {
         email,
         telephone,
         nacionality,
+        image,
         speciality:specialityFind,
         //timing, es un array con la franja horaria disponible
         timing,
@@ -122,6 +123,7 @@ const updateDoctor = async (request,response,next) =>{
 
     doctor.email = email;
     doctor.telephone = telephone;
+    doctor.image = image
 
     if (doctor.speciality.some((s) => s._id.toString() === specialityFind.id)) {
         const err = new HttpError('The Speciality already is saved in this Doctor, please try another', 409);

@@ -11,6 +11,10 @@ const specialitySchema = new mongoose.Schema({  // con el Schema tenemos acceso 
     description:{
         type:String,
         required:true,
+    },
+    image:{
+        type:String,
+        required:true
     }
 })
 
